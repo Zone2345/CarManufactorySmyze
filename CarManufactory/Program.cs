@@ -1,8 +1,7 @@
 using CarManufactory.Services;
-using Polly.Extensions.Http;
 using Polly;
+using Polly.Extensions.Http;
 using System.Net;
-using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,11 +18,9 @@ builder.Services.AddHttpClient<IGetCarOfferClientService, GetOfferService>(clien
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
@@ -35,9 +32,9 @@ app.Run();
 
 
 static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
-        {
-            return HttpPolicyExtensions
-            .HandleTransientHttpError()
-            .OrResult(msg => msg.StatusCode is HttpStatusCode.NotFound or HttpStatusCode.BadRequest)
-            .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
-        }
+{
+    return HttpPolicyExtensions
+    .HandleTransientHttpError()
+    .OrResult(msg => msg.StatusCode is HttpStatusCode.NotFound or HttpStatusCode.BadRequest)
+    .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+}
