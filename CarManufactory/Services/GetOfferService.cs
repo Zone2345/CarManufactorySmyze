@@ -25,8 +25,8 @@ namespace CarManufactory.Services
                 var response = await _httpClient.GetAsync($"?name={name}&model={model}&color={color}");
                 if (response.IsSuccessStatusCode)
                 {
-                    var x = await response.Content.ReadAsStringAsync();
-                    result = JsonSerializer.Deserialize<Car>(x);
+                    var jsonResult = await response.Content.ReadAsStringAsync();
+                    result = JsonSerializer.Deserialize<Car>(jsonResult);
                 }
                 
             }catch(Exception e)
