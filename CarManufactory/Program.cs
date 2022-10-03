@@ -13,7 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient<IGetCarOfferClientService, GetOfferService>(client =>
 {
-    client.BaseAddress = new Uri(builder.Configuration["AzureFunctionURL"]);
+    client.BaseAddress = new Uri("https://car-factory.azurewebsites.net/api/GetCarOffer");
 }).AddPolicyHandler(GetRetryPolicy());
 var app = builder.Build();
 
